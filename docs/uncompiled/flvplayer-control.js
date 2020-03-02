@@ -1,7 +1,7 @@
 /*!
- * FlvPlayer.js v1.1.3
+ * FlvPlayer.js v1.1.4
  * Github: https://github.com/zhw2590582/FlvPlayer#readme
- * (c) 2017-2019 Harvey Zack
+ * (c) 2017-2020 Harvey Zack
  * Released under the MIT License.
  */
 
@@ -9,7 +9,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
   (global = global || self, global.FlvplayerControl = factory());
-}(this, function () { 'use strict';
+}(this, (function () { 'use strict';
 
   function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
@@ -111,16 +111,16 @@
   }
 
   var _typeof_1 = createCommonjsModule(function (module) {
-  function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
-
   function _typeof(obj) {
-    if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
+    "@babel/helpers - typeof";
+
+    if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
       module.exports = _typeof = function _typeof(obj) {
-        return _typeof2(obj);
+        return typeof obj;
       };
     } else {
       module.exports = _typeof = function _typeof(obj) {
-        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
+        return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
       };
     }
 
@@ -301,7 +301,7 @@
   var screenfull = createCommonjsModule(function (module) {
   /*!
   * screenfull
-  * v5.0.0 - 2019-09-09
+  * v5.0.2 - 2020-02-13
   * (c) Sindre Sorhus; MIT License
   */
   (function () {
@@ -393,7 +393,11 @@
 
   				element = element || document.documentElement;
 
-  				Promise.resolve(element[fn.requestFullscreen]()).catch(reject);
+  				var returnPromise = element[fn.requestFullscreen]();
+
+  				if (returnPromise instanceof Promise) {
+  					returnPromise.then(onFullScreenEntered).catch(reject);
+  				}
   			}.bind(this));
   		},
   		exit: function () {
@@ -410,7 +414,11 @@
 
   				this.on('change', onFullScreenExit);
 
-  				Promise.resolve(document[fn.exitFullscreen]()).catch(reject);
+  				var returnPromise = document[fn.exitFullscreen]();
+
+  				if (returnPromise instanceof Promise) {
+  					returnPromise.then(onFullScreenExit).catch(reject);
+  				}
   			}.bind(this));
   		},
   		toggle: function (element) {
@@ -827,7 +835,9 @@
     }
   };
 
+  window.FlvplayerControl = Control;
+
   return Control;
 
-}));
+})));
 //# sourceMappingURL=flvplayer-control.js.map

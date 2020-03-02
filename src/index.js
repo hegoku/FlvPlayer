@@ -9,6 +9,9 @@ import Demuxer from './demuxer';
 import Stream from './stream';
 import * as utils from './utils';
 
+import self_decode_message from './demuxer/self_decode_message';
+import video_decode_message from './demuxer/video/video_decode_message';
+
 let id = 0;
 class FlvPlayer extends Emitter {
     constructor(options) {
@@ -46,7 +49,7 @@ class FlvPlayer extends Emitter {
         this.events = new Events(this);
         this.player = new Player(this);
         this.decoder = new Decoder(this);
-        this.demuxer = new Demuxer(this);
+        this.demuxer = new Demuxer(this, video_decode_message);
         this.stream = new Stream(this);
 
         utils.proxyPropertys(this, this.player);

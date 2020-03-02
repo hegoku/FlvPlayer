@@ -242,10 +242,13 @@ function demuxerVideoTag(tag) {
             result.numOfSequenceParameterSets === 1,
             `[H264] Strange numOfSequenceParameterSets: ${result.numOfSequenceParameterSets}`,
         );
+
+        // let sps_data=[];
         for (let i = 0; i < result.numOfSequenceParameterSets; i += 1) {
             result.sequenceParameterSetLength = readBufferSum(readDcr(2));
             if (result.sequenceParameterSetLength > 0) {
                 const SPS = readDcr(result.sequenceParameterSetLength);
+                // sps_data.push(mergeBuffer(nalStart, SPS))
                 postMessage({
                     type: 'videoData',
                     data: mergeBuffer(nalStart, SPS),
@@ -261,10 +264,12 @@ function demuxerVideoTag(tag) {
             result.numOfPictureParameterSets === 1,
             `[H264] Strange numOfPictureParameterSets: ${result.numOfPictureParameterSets}`,
         );
+        let pps_data=[];
         for (let i = 0; i < result.numOfPictureParameterSets; i += 1) {
             result.pictureParameterSetLength = readBufferSum(readDcr(2));
             if (result.pictureParameterSetLength > 0) {
                 const PPS = readDcr(result.pictureParameterSetLength);
+                // pps_data.push(mergeBuffer(nalStart, PPS))
                 postMessage({
                     type: 'videoData',
                     data: mergeBuffer(nalStart, PPS),
@@ -275,6 +280,8 @@ function demuxerVideoTag(tag) {
         postMessage({
             type: 'AVCDecoderConfigurationRecord',
             data: result,
+            // pps: pps_data,
+            // sps_data: sps_data
         });
     } else if (AVCPacketType === 1) {
         const { lengthSizeMinusOne } = AVCDecoderConfigurationRecord;
