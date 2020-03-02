@@ -9,7 +9,4 @@ export default function events(flv, player) {
         }
     });
 
-    proxy(player.$canvas, 'click', () => {
-        player.toggle();
-    });
 }
